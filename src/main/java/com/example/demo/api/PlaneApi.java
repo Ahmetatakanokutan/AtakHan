@@ -1,6 +1,7 @@
 package com.example.demo.api;
 
 import com.example.demo.business.abstracts.PlaneService;
+import com.example.demo.enums.PlaneEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class PlaneApi {
     }
 
     @GetMapping ("{destination}")
-    void thrustUp(@PathVariable("destination")String destination) {
+    void thrustUp(@PathVariable("destination") PlaneEnum destination) {
         iPlaneControl.planeCommand(destination);
     }
 

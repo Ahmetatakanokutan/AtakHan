@@ -1,21 +1,24 @@
+#include <SPI.h> 
+#include <nRF24L01.h> 
+#include <RF24.h> 
+
+
+RF24 radio(9,10);
+const byte Address[6] = "atakHan";
+
 void setup() {
   Serial.begin(2000000);
-  pinMode(12, OUTPUT);
+  pinMode(8, OUTPUT);
+  radio.begin();
+  radio.openReadingPipe(0, Address);
+  radio.setPALevel(RF24_PA_MAX);
+  radio.startListening();
 }
 
 void loop() {
-  
-       //wait for data available
-  Serial.setTimeout(1);
-  String teststr = Serial.readStringUntil('\n');  //read until timeout
-  Serial.print(teststr);
-  // remove any \r \n whitespace at the end of the String
-  if (teststr == "yukari") {
-    
-     digitalWrite(12, HIGH);
-     delay(1000);
-     digitalWrite(12, LOW);
-     delay(1000);
-     
+  char teststr[32];
+  if (radio.available()) {
+    radio.read(&teststr, sizeof(teststr));
+    Serial.println(teststr);
   }
 }

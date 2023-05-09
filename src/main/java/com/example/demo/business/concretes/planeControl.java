@@ -2,32 +2,43 @@ package com.example.demo.business.concretes;
 
 import com.example.demo.business.abstracts.PlaneService;
 import com.example.demo.dataAccess.PlaneDao;
+import com.example.demo.enums.PlaneEnum;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.fazecast.jSerialComm.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Scanner;
 
 @Service
+@EnableScheduling
 public class planeControl implements PlaneService {
 
     PlaneDao planeDao;
 
-    SerialPort []comnPort = SerialPort.getCommPorts();
+    SerialPort []comnPort;
+    int port;
 
 
     @Autowired
     public planeControl(PlaneDao planeDao){
+        Scanner scanner = new Scanner(System.in);
         this.planeDao = planeDao;
         this.comnPort = SerialPort.getCommPorts();
-        comnPort[0].setBaudRate(2000000);
-        comnPort[0].setNumDataBits(8);
-        comnPort[0].setNumStopBits(1);
-        comnPort[0].setParity(SerialPort.NO_PARITY);
-        comnPort[0].addDataListener(new SerialPortDataListener() {
+        System.out.println("\nPort secimi yapin");
+        for (int i = 0; i < comnPort.length; i++)
+            System.out.println("\n" + (i + 1) + ") " + comnPort[i].getDescriptivePortName());
+        port = scanner.nextInt() - 1;
+        comnPort[port].setBaudRate(2000000);
+        comnPort[port].setNumDataBits(8);
+        comnPort[port].setNumStopBits(1);
+        comnPort[port].setParity(SerialPort.NO_PARITY);
+        comnPort[port].addDataListener(new SerialPortDataListener() {
             @Override
             public int getListeningEvents() {
                 return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
@@ -35,18 +46,22 @@ public class planeControl implements PlaneService {
 
             @Override
             public void serialEvent(SerialPortEvent serialPortEvent) {
-                byte[] readBuffer = new byte[comnPort[0].bytesAvailable()];
-                int numRead = comnPort[0].readBytes(readBuffer, readBuffer.length);
+                byte[] readBuffer = new byte[comnPort[port].bytesAvailable()];
+                int numRead = comnPort[port].readBytes(readBuffer, readBuffer.length);
                 for (int i = 0; i < readBuffer.length; i++) {
                     System.out.print((char) readBuffer[i]);
                 }
             }
         });
-        comnPort[0].openPort();
+        comnPort[port].openPort();
+        System.out.println(comnPort[port].getDescriptivePortName());
+
     }
 
+    //@Scheduled(fixedDelay = 1)
     @SneakyThrows
-    public void planeCommand(String destination) {
-        comnPort[0].writeBytes(destination.getBytes(), destination.length());
+    public void planeCommand(PlaneEnum destination) {
+        comnPort[port].writeBytes(destination.toString().getBytes(), destination.toString().length());
+
     }
 }
