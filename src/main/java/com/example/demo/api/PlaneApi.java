@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 @RestController
 @RequestMapping("api/plane")
@@ -19,8 +20,14 @@ public class PlaneApi {
     }
 
     @GetMapping ("{destination}")
-    void thrustUp(@PathVariable("destination") PlaneEnum destination) {
+    void planeControl(@PathVariable("destination") PlaneEnum destination) {
         iPlaneControl.planeCommand(destination);
     }
+
+    @GetMapping("/thrust/{thrust}")
+    void thrustControl(@PathVariable("thrust") String thrustPercentage){
+        iPlaneControl.thrustCommand(thrustPercentage);
+    }
+
 
 }
