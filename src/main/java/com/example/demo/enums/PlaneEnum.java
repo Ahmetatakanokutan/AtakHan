@@ -1,10 +1,10 @@
 package com.example.demo.enums;
 
 public enum PlaneEnum {
-    Forward,
+    asagi,
     yukari,
-    Right,
-    Left,
-    Break,
-    Normal
+    sag,
+    sol,
+    yavasag,
+    yavasol
 }

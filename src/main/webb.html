@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ATAKHAN</title>
+  <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+  />
+
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=6ent1x0Rw2wI4CNfyWXKer8SWPRHYh6trGUVclrmH2Ft0ac35-qdyo6vX9EGCCHsUvFB0fcgxh4yCsXSptCmsauRkU1vO4TxG9jdebp39FOhMtgM82nj6tH-D84H5pUskrz7gWtuRfA4pcihF5SZjw" charset="UTF-8"></script><style>
+  body {
+    background-color: rgba(0,0,0, 0.5);
+  }
+</style>
+
+
+
+</head>
+<body>
+
+
+<div class="container-fluid p-5 bg-primary text-white text-center">
+  <h1>Control Panel</h1>
+</div>
+
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-sm-4 text-right">
+      <a href="#" id="Left" class="btn btn-info" role="button">Left</a>
+    </div>
+    <div class="col-sm-4 text-center">
+      <a href="#" id="yukari" class="btn btn-info" role="button">yukari</a>
+      <br><br><br><br>
+      <a href="#" id="Down" class="btn btn-info" role="button">Down</a>
+      <br><br><br><br>
+      <a href="#" id="Forward" class="btn btn-warning" role="button">Forward</a>
+      <br><br><br><br>
+      <a href="#" id="Break" class="btn btn-warning" role="button">Break</a>
+    </div>
+
+    <div class="col-sm-4 text-center">
+      <a href="#" id="Right" class="btn btn-info" role="button">Right</a>
+    </div>
+
+
+  </div>
+</div>
+
+<script>
+
+  let isKeyPressed = false;
+  let intervalId = null;
+
+  function sendRequest(url) {
+    fetch(url, { method: 'GET' });
+  }
+
+  document.addEventListener("keydown", function(event) {
+    if (!isKeyPressed) {
+      isKeyPressed = true;
+      intervalId = setInterval(function() {
+        if (event.key === "w") {
+          sendRequest('http://localhost:8080/api/plane/yukari');
+        } else if (event.key === "s") {
+          sendRequest('http://localhost:8080/api/plane/asagi');
+        } if (event.key === "a") {
+          sendRequest('http://localhost:8080/api/plane/sol');
+        } else if (event.key === "d") {
+          sendRequest('http://localhost:8080/api/plane/sag');
+        } if (event.key === "q") {
+          sendRequest('http://localhost:8080/api/plane/yavasol');
+        } else if (event.key === "e") {
+          sendRequest('http://localhost:8080/api/plane/yavasag');
+        }
+      }, 10); // İstek aralığını burada ayarlayabilirsiniz (örnekte her 100ms)
+    }
+  });
+
+  document.addEventListener("keyup", function(event) {
+    if (isKeyPressed) {
+      isKeyPressed = false;
+      clearInterval(intervalId);
+    }
+  });
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('Down').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/asagi', { method: 'GET' });
+    });
+    document.getElementById('Down').addEventListener('mouseup', function() {
+      fetch('http://localhost:8080/api/plane/asagi', { method: 'GET' });
+    });
+
+    document.getElementById('yukari').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/yukari', { method: 'GET' });
+    });
+    document.getElementById('yukari').addEventListener('mouseup', function() {
+      fetch('http://localhost:8080/api/plane/yukari', { method: 'GET' });
+    });
+
+    document.getElementById('Left').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/Left', { method: 'GET' });
+    });
+    document.getElementById('Left').addEventListener('mouseup', function() {
+      fetch('http://localhost:8080/api/plane/Left', { method: 'GET' });
+    });
+
+    document.getElementById('Right').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/Right', { method: 'GET' });
+    });
+    document.getElementById('Right').addEventListener('mouseup', function() {
+      fetch('http://localhost:8080/api/plane/Right', { method: 'GET' });
+    });
+
+    document.getElementById('Forward').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/Forward', { method: 'GET' });
+    });
+    document.getElementById('Forward').addEventListener('mouseup', function() {
+      fetch('http://localhost:8080/api/plane/stop', { method: 'GET' });
+    });
+    document.getElementById('Break').addEventListener('mousedown', function() {
+      fetch('/right_side', { method: 'GET' });
+    });
+    document.getElementById('Break').addEventListener('mouseup', function() {
+      fetch('/stop', { method: 'GET' });
+    });
+
+
+  });
+</script>
+
+
+
+
+</body>
+
+</html>

@@ -61,7 +61,8 @@ public class planeControl implements PlaneService {
     //@Scheduled(fixedDelay = 1)
     @SneakyThrows
     public void planeCommand(PlaneEnum destination) {
-        comnPort[port].writeBytes(destination.toString().getBytes(), destination.toString().length());
+        String destinationCopy = destination.toString() + '\n';
+        comnPort[port].writeBytes(destinationCopy.getBytes(), destinationCopy.length());
 
     }
     public void thrustCommand(String thrustPercentage){
