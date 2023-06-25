@@ -31,7 +31,7 @@ void setup() {
   YavasDonus.attach(4);;
   radio.begin();
   radio.setDataRate( RF24_250KBPS );
-  radio.setPALevel(RF24_PA_MAX);
+  radio.setPALevel(RF24_PA_MIN);
   radio.openReadingPipe(1, address);
   radio.startListening();
   Brushless.write(10);
@@ -52,7 +52,7 @@ void loop() {
     }
 
     
-      if (!strcmp(str, "yukari")) {
+      if (!strcmp(str, "asagi")) {
         if(KalkisDeger > 40){
         KalkisDeger -= 5;
         Kalkis.write(KalkisDeger);
@@ -60,7 +60,7 @@ void loop() {
         DikeyEtkZam = millis();
       }
       
-    else if(!strcmp(str, "asagi")) {
+    else if(!strcmp(str, "yukari")) {
       if(KalkisDeger <= 140){
         KalkisDeger += 5;
         Kalkis.write(KalkisDeger);
@@ -70,8 +70,8 @@ void loop() {
 
 
     if (!strcmp(str, "sag")) {
-      if (SagKanatDeger < 140 && SolKanatDeger > 40) {
-        SagKanatDeger += 5;
+      if (SagKanatDeger > 40 && SolKanatDeger > 40) {
+        SagKanatDeger -= 5;
         SolKanatDeger -= 5;
         SagKanat.write(SagKanatDeger);
         SolKanat.write(SolKanatDeger);
@@ -79,9 +79,9 @@ void loop() {
       YatayEtkZam = millis();
     }
     else if (!strcmp(str, "sol")) {
-      if (SolKanatDeger < 140 && SagKanatDeger > 40) {
+      if (SolKanatDeger < 140 && SagKanatDeger < 140) {
         SolKanatDeger += 5;
-        SagKanatDeger -= 5;
+        SagKanatDeger += 5;
         SagKanat.write(SagKanatDeger);
         SolKanat.write(SolKanatDeger);
       }
@@ -122,6 +122,9 @@ void loop() {
     KalkisDeger = 90;
     Kalkis.write(KalkisDeger);
   }
+if(!radio.isChipConnected()){
+  Brushless.write(10);
+}
     
 }
 

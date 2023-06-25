@@ -1,52 +1,128 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ATAKHAN</title>
+  <title>ATAKHAN-UAV</title>
+  <meta charset="utf-8">
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+
   <link
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
           rel="stylesheet"
   />
 
-  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=6ent1x0Rw2wI4CNfyWXKer8SWPRHYh6trGUVclrmH2Ft0ac35-qdyo6vX9EGCCHsUvFB0fcgxh4yCsXSptCmsauRkU1vO4TxG9jdebp39FOhMtgM82nj6tH-D84H5pUskrz7gWtuRfA4pcihF5SZjw" charset="UTF-8"></script><style>
-  body {
-    background-color: rgba(0,0,0, 0.5);
+  <link href='https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css' rel='stylesheet'>
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=gMqHV7ux_5DoYVBg18N95EO8iBnVz84I8eiZAm5Sz2khk_ubM-Z8IkHPVKroyr8CGyPcnsD4daiFXtz3L5CMqbMpGIxyam1Zq96fE4ce1fZzwNwrtmK7aHv7KaRmJbLZ5aVAL-dp4uhmwSAD-HbYbg" charset="UTF-8"></script><style>
+  .sidebar{
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
   }
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+
+  .sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+
+  .openbtn {
+    font-size: 10px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+  }
+
+  .openbtn:hover {
+    background-color: #444;
+  }
+
+  #main {
+    transition: margin-left .5s;
+  }
+
+
 </style>
-
-
 
 </head>
 <body>
 
-
-<div class="container-fluid p-5 bg-primary text-white text-center">
-  <h1>Control Panel</h1>
-</div>
-
-<div class="container mt-3">
-  <div class="row">
-    <div class="col-sm-4 text-right">
-      <a href="#" id="Left" class="btn btn-info" role="button">Left</a>
+<div id="main">
+  <div id="Sidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <p style="color:whitesmoke;">İtiş Yüzdesi</p>
+    <div class="slidecontainer">
+      <input type="range" min="0" max="100" value="0" class="slider" id="Thrust">
+      <p><span id="sliderValue"></span>%</p>
     </div>
-    <div class="col-sm-4 text-center">
-      <a href="#" id="yukari" class="btn btn-info" role="button">yukari</a>
-      <br><br><br><br>
-      <a href="#" id="Down" class="btn btn-info" role="button">Down</a>
-      <br><br><br><br>
-      <a href="#" id="Forward" class="btn btn-warning" role="button">Forward</a>
-      <br><br><br><br>
-      <a href="#" id="Break" class="btn btn-warning" role="button">Break</a>
+  </div>
+
+
+  <nav class="navbar navbar-inverse">
+    <button class="openbtn" onclick="openNav()">&#9776; Motor Kontrolü</button>
+    <p class="navbar-text">AtakHan-TR001 Web Kontrol Paneli</p>
+
+  </nav>
+
+
+
+  <div class="container mt-3">
+    <div class="row">
+      <div class="col-sm-4 text-center">
+        <a href="#" id="sol" class="btn btn-info" role="button">Sol</a>
+        <br><br>
+        <a href="#" id="yavasol" class="btn btn-warning" role="button">Yavaş Sol</a>
+      </div>
+      <div class="col-sm-4 text-center">
+        <a href="#" id="yukari" class="btn btn-info" role="button">Yukarı</a>
+        <br><br><br><br><br><br>
+        <a href="#" id="asagi" class="btn btn-info" role="button">Aşağı</a>
+        <br><br><br><br><br><br>
+        <a href="#" id="motor" class="btn btn-info" role="button">motor</a>
+      </div>
+
+
+      <div class="col-sm-4 text-center">
+        <a href="#" id="sag" class="btn btn-info" role="button">Sağ</a>
+        <br><br>
+        <a href="#" id="yavasag" class="btn btn-warning" role="button">Yavaş Sağ</a>
+      </div>
+
+
+
     </div>
-
-    <div class="col-sm-4 text-center">
-      <a href="#" id="Right" class="btn btn-info" role="button">Right</a>
-    </div>
-
-
   </div>
 </div>
 
+
 <script>
+
+  function openNav() {
+    document.getElementById("Sidebar").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+  }
+
+  function closeNav() {
+    document.getElementById("Sidebar").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+  }
+
+
 
   let isKeyPressed = false;
   let intervalId = null;
@@ -63,19 +139,18 @@
           sendRequest('http://localhost:8080/api/plane/yukari');
         } else if (event.key === "s") {
           sendRequest('http://localhost:8080/api/plane/asagi');
-        } if (event.key === "a") {
+        } else if (event.key === "a") {
           sendRequest('http://localhost:8080/api/plane/sol');
         } else if (event.key === "d") {
           sendRequest('http://localhost:8080/api/plane/sag');
-        } if (event.key === "q") {
-          sendRequest('http://localhost:8080/api/plane/yavasol');
         } else if (event.key === "e") {
           sendRequest('http://localhost:8080/api/plane/yavasag');
+        } else if (event.key === "q") {
+          sendRequest('http://localhost:8080/api/plane/yavasol');
         }
-      }, 10); // İstek aralığını burada ayarlayabilirsiniz (örnekte her 100ms)
+      }, 10);
     }
   });
-
   document.addEventListener("keyup", function(event) {
     if (isKeyPressed) {
       isKeyPressed = false;
@@ -85,49 +160,80 @@
 
 
   document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('Down').addEventListener('mousedown', function() {
+    document.getElementById('asagi').addEventListener('mousedown', function() {
       fetch('http://localhost:8080/api/plane/asagi', { method: 'GET' });
     });
-    document.getElementById('Down').addEventListener('mouseup', function() {
-      fetch('http://localhost:8080/api/plane/asagi', { method: 'GET' });
-    });
+
+
 
     document.getElementById('yukari').addEventListener('mousedown', function() {
       fetch('http://localhost:8080/api/plane/yukari', { method: 'GET' });
     });
-    document.getElementById('yukari').addEventListener('mouseup', function() {
-      fetch('http://localhost:8080/api/plane/yukari', { method: 'GET' });
+
+
+
+    document.getElementById('sol').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/sol', { method: 'GET' });
     });
 
-    document.getElementById('Left').addEventListener('mousedown', function() {
-      fetch('http://localhost:8080/api/plane/Left', { method: 'GET' });
-    });
-    document.getElementById('Left').addEventListener('mouseup', function() {
-      fetch('http://localhost:8080/api/plane/Left', { method: 'GET' });
+
+
+    document.getElementById('sag').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/sag', { method: 'GET' });
     });
 
-    document.getElementById('Right').addEventListener('mousedown', function() {
-      fetch('http://localhost:8080/api/plane/Right', { method: 'GET' });
-    });
-    document.getElementById('Right').addEventListener('mouseup', function() {
-      fetch('http://localhost:8080/api/plane/Right', { method: 'GET' });
+
+
+    document.getElementById('yavasag').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/yavasag', { method: 'GET' });
     });
 
-    document.getElementById('Forward').addEventListener('mousedown', function() {
-      fetch('http://localhost:8080/api/plane/Forward', { method: 'GET' });
-    });
-    document.getElementById('Forward').addEventListener('mouseup', function() {
-      fetch('http://localhost:8080/api/plane/stop', { method: 'GET' });
-    });
-    document.getElementById('Break').addEventListener('mousedown', function() {
-      fetch('/right_side', { method: 'GET' });
-    });
-    document.getElementById('Break').addEventListener('mouseup', function() {
-      fetch('/stop', { method: 'GET' });
-    });
 
+
+    document.getElementById('yavasol').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/yavasol', { method: 'GET' });
+    });
+    document.getElementById('motor').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/thrust/10', { method: 'GET' });
+    });
 
   });
+
+  var slider = document.getElementById('Thrust');
+
+
+  document.addEventListener('keydown', function(event) {
+    if (event.keyCode === 38) {
+      slider.value+=2;
+      var thrustvalue = slider.value;
+      console.log('Thrust increased to:', thrustvalue);
+      const url = 'http://localhost:8080/api/plane/thrust/' + thrustvalue;
+      sendRequest(url);
+
+    } else if (event.keyCode === 40) {
+      slider.value-=2;
+      var thrustvalue = slider.value;
+      console.log('Thrust decreased to:', thrustvalue);
+      const url = 'http://localhost:8080/api/plane/thrust/' + thrustvalue;
+      sendRequest(url);
+
+    }
+  }, 10);
+
+  document.getElementById('Thrust').addEventListener('change', function() {
+    var thrustvalue = slider.value;
+    console.log(thrustvalue);
+    const url = 'http://localhost:8080/api/plane/thrust/' + thrustvalue;
+    sendRequest(url);
+
+  });
+
+
+
+
+
+
+
 </script>
 
 

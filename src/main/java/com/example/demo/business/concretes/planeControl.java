@@ -66,6 +66,7 @@ public class planeControl implements PlaneService {
 
     }
     public void thrustCommand(String thrustPercentage){
+        thrustPercentage = thrustPercentage+'\n';
         comnPort[port].writeBytes(thrustPercentage.getBytes(),thrustPercentage.length());
     }
 }
