@@ -11,12 +11,11 @@ Servo SolKanat;
 Servo YavasDonus;
 Servo Kalkis;
 char str[32];
-int thrust = 0;
 int SagKanatDeger = 90;
 int SolKanatDeger = 90;
 int YavasDonusDeger = 90;
 int KalkisDeger = 90;
-unsigned long YavYonEtkZam = 0; //motorlarin calistiktan sonra origin noktalarina donmeleri icin hazirlanmis zaman degerleri
+unsigned long YavYonEtkZam = 0;
 unsigned long YatayEtkZam = 0;
 unsigned long DikeyEtkZam = 0;
 long ZamanKont;
@@ -28,32 +27,43 @@ void setup() {
   Kalkis.attach(7);
   SolKanat.attach(6);
   SagKanat.attach(5);
-  YavasDonus.attach(4);;
+  YavasDonus.attach(4);
   radio.begin();
   radio.setDataRate( RF24_250KBPS );
   radio.setPALevel(RF24_PA_MIN);
   radio.openReadingPipe(1, address);
   radio.startListening();
   Brushless.write(10);
-  //SagKanat.write(50);
-  //SolKanat.write(50);
-  //delay(5000);
 }
 
 void loop() {
   
-  if (radio.available()) {
+   if (radio.available()) {
     radio.read( &str, sizeof(str) );
     Serial.print(str);
 
-    if (thrust = atoi(str)) {
-      thrust = map(thrust, 0, 100, 1000, 2000);
-      Brushless.write(thrust);
+    // Parçalanmış veriyi tutacak değişkenler
+    char command[10];
+    char valueStr[10];
+
+    // Komutun başında "motor:" var mı kontrol et
+    if (strncmp(str, "motor:", 6) == 0) {
+      // Gelen değeri al
+      char* valuePtr = str + 6; // "motor:" kısmını atla
+      int value = atoi(valuePtr);
+      
+      // Gelen değeri kontrol et
+      if (value >= 0 && value <= 100) {
+        // Değeri uygun aralığa map et ve servo pozisyonunu ayarla
+        int mappedValue = map(value, 0, 100, 1000, 2000);
+        Brushless.write(mappedValue);
+      }
     }
 
     
       if (!strcmp(str, "asagi")) {
         if(KalkisDeger > 40){
+
         KalkisDeger -= 5;
         Kalkis.write(KalkisDeger);
         }
@@ -102,6 +112,18 @@ void loop() {
       YavYonEtkZam = millis();
     }
   }
+  else { // Eğer bağlantı kesilirse
+    // Yeniden bağlantı kurma işlemleri
+    if (!radio.isChipConnected()) {
+      radio.begin();
+      radio.setDataRate( RF24_250KBPS );
+      radio.setPALevel(RF24_PA_MIN);
+      radio.openReadingPipe(1, address);
+      radio.startListening();
+      Brushless.write(10); // Motoru başlangıç konumuna getir
+    }
+  }
+
 
   ZamanKont = (YavYonEtkZam + 100) - millis();
   if(ZamanKont < 0){
@@ -127,4 +149,3 @@ if(!radio.isChipConnected()){
 }
     
 }
-

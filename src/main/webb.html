@@ -148,7 +148,7 @@
         } else if (event.key === "q") {
           sendRequest('http://localhost:8080/api/plane/yavasol');
         }
-      }, 10);
+      }, 50);
     }
   });
   document.addEventListener("keyup", function(event) {
@@ -204,7 +204,7 @@
 
   document.addEventListener('keydown', function(event) {
     if (event.keyCode === 38) {
-      slider.value+=2;
+      slider.value = parseInt(slider.value) +2;
       var thrustvalue = slider.value;
       console.log('Thrust increased to:', thrustvalue);
       const url = 'http://localhost:8080/api/plane/thrust/' + thrustvalue;
@@ -218,7 +218,7 @@
       sendRequest(url);
 
     }
-  }, 10);
+  }, 50);
 
   document.getElementById('Thrust').addEventListener('change', function() {
     var thrustvalue = slider.value;

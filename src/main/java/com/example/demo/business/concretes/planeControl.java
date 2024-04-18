@@ -1,7 +1,6 @@
 package com.example.demo.business.concretes;
 
 import com.example.demo.business.abstracts.PlaneService;
-import com.example.demo.dataAccess.PlaneDao;
 import com.example.demo.enums.PlaneEnum;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +18,15 @@ import java.util.Scanner;
 @EnableScheduling
 public class planeControl implements PlaneService {
 
-    PlaneDao planeDao;
+
 
     SerialPort []comnPort;
     int port;
 
 
     @Autowired
-    public planeControl(PlaneDao planeDao){
+    public planeControl(){
         Scanner scanner = new Scanner(System.in);
-        this.planeDao = planeDao;
         this.comnPort = SerialPort.getCommPorts();
         System.out.println("\nPort secimi yapin");
         for (int i = 0; i < comnPort.length; i++)
@@ -66,7 +64,7 @@ public class planeControl implements PlaneService {
 
     }
     public void thrustCommand(String thrustPercentage){
-        thrustPercentage = thrustPercentage+'\n';
+        thrustPercentage = "motor:"+thrustPercentage+'\n';
         comnPort[port].writeBytes(thrustPercentage.getBytes(),thrustPercentage.length());
     }
 }
