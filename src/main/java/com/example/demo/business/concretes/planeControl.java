@@ -1,6 +1,7 @@
 package com.example.demo.business.concretes;
 
 import com.example.demo.business.abstracts.PlaneService;
+import com.example.demo.entites.PlaneEntity;
 import com.example.demo.enums.PlaneEnum;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,14 @@ public class planeControl implements PlaneService {
     @SneakyThrows
     public void planeCommand(PlaneEnum destination) {
         String destinationCopy = destination.toString() + '\n';
+        comnPort[port].writeBytes(destinationCopy.getBytes(), destinationCopy.length());
+
+    }
+
+    @SneakyThrows
+    public void planeCommand(PlaneEntity plane) {
+        String destinationCopy = plane.getThrottle().toString() +"/" + plane.getStringRudder().toString() + "/" +
+        plane.getStringElevator().toString() + "/" + plane.getStringAilerionRight().toString() + "/" + plane.getStringAilerionLeft() + '\n';
         comnPort[port].writeBytes(destinationCopy.getBytes(), destinationCopy.length());
 
     }

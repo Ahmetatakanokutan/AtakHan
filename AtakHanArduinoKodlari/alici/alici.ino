@@ -55,7 +55,7 @@ void loop() {
       // Gelen değeri kontrol et
       if (value >= 0 && value <= 100) {
         // Değeri uygun aralığa map et ve servo pozisyonunu ayarla
-        int mappedValue = map(value, 0, 100, 1000, 2000);
+        int mappedValue = map(value, 0, 100, 1100, 1280);
         Brushless.write(mappedValue);
       }
     }

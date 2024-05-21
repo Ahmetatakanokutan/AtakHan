@@ -1,6 +1,7 @@
 package com.example.demo.api;
 
 import com.example.demo.business.abstracts.PlaneService;
+import com.example.demo.entites.PlaneEntity;
 import com.example.demo.enums.PlaneEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,5 +27,11 @@ public class PlaneApi {
     @GetMapping("/thrust/{thrust}")
     void thrustControl(@PathVariable("thrust") String thrustPercentage) {
         iPlaneControl.thrustCommand(thrustPercentage);
+    }
+
+    @CrossOrigin(origins = {"http://localhost:63342" , "http://192.168.1.100"})
+    @PutMapping("/data")
+    void thrustControl(@RequestBody PlaneEntity planeEntity) {
+        iPlaneControl.planeCommand(planeEntity);
     }
 }

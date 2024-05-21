@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Joystick Gibi Mouse Kullanımı</title>
+    <style>
+        /* Daire şekli için stil */
+        #joystick {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            margin: 50px auto;
+            overflow: hidden;
+        }
+
+        /* Joystick içindeki sabit nokta */
+        #centerPoint {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ff0000;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Katman katman çemberler */
+        .ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 1px solid #888;
+        }
+
+        /* Kırmızı çizgiler */
+        #cross {
+            position: absolute;
+            width: 200px; /* Çizgi uzunluğu */
+            height: 1px; /* Çizgi kalınlığı */
+            background-color: #ff0000;
+            top: 50%;
+            left: 0;
+        }
+
+        #cross::before {
+            content: '';
+            position: absolute;
+            width: 1px; /* Çizgi kalınlığı */
+            height: 200px; /* Çizgi uzunluğu */
+            background-color: #ff0000;
+            top: -100px;
+            left: 50%;
+        }
+    </style>
+</head>
+<body>
+<div id="joystick">
+    <!-- Daireler -->
+    <div class="ring" style="width: 100%; height: 100%;"></div>
+    <div class="ring" style="width: 80%; height: 80%;"></div>
+    <div class="ring" style="width: 60%; height: 60%;"></div>
+    <div class="ring" style="width: 40%; height: 40%;"></div>
+    <div class="ring" style="width: 20%; height: 20%;"></div>
+
+    <!-- Orta nokta ve kırmızı çizgiler -->
+    <div id="centerPoint"></div>
+    <div id="cross"></div>
+</div>
+
+<script>
+    const joystick = document.getElementById('joystick');
+    const centerPoint = document.getElementById('centerPoint');
+    const cross = document.getElementById('cross');
+    const radius = joystick.clientWidth / 2;
+
+    // Orijin noktası
+    const origin = { x: joystick.offsetLeft + radius, y: joystick.offsetTop + radius };
+
+    // Fare kontrol bayrağı
+    let isMouseDown = false;
+
+    // Fare hareketini dinleyen fonksiyon
+    function handleMouseMove(event) {
+        if (isMouseDown) {
+            // Fare koordinatlarını al
+            const mouseX = event.clientX;
+            const mouseY = event.clientY;
+
+            // Fare hareketinin orijine olan uzaklığını hesapla
+            const deltaX = mouseX - origin.x;
+            const deltaY = mouseY - origin.y;
+
+            // Hareketi sınırla ve daire içinde tut
+            // Hareketi yalnızca yukarı, aşağı, sağ, sol ve çapraz yönlerle sınırlayın
+            let constrainedX = 0;
+            let constrainedY = 0;
+
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                // Sağ veya sol hareket
+                constrainedX = Math.sign(deltaX) * Math.min(Math.abs(deltaX), radius);
+            } else {
+                // Yukarı veya aşağı hareket
+                constrainedY = Math.sign(deltaY) * Math.min(Math.abs(deltaY), radius);
+            }
+
+            // Kırmızı noktanın pozisyonunu güncelle
+            centerPoint.style.transform = `translate(${constrainedX}px, ${constrainedY}px)`;
+
+            // Verileri konsola yazdır
+            const xData = Math.round((constrainedX / radius) * 100);
+            const yData = Math.round((constrainedY / radius) * 100);
+            console.log(`X: ${xData}, Y: ${yData}`);
+        }
+    }
+
+    // Fare basıldığında kontrolü başlat
+    joystick.addEventListener('mousedown', () => {
+        isMouseDown = true;
+    });
+
+    // Fare bırakıldığında kırmızı noktanın orijine dönmesi
+    joystick.addEventListener('mouseup', () => {
+        isMouseDown = false;
+        centerPoint.style.transform = 'translate(-50%, -50%)';
+        console.log('X: 0, Y: 0');
+    });
+
+    // Fare alan dışına çıktığında kırmızı noktanın orijine dönmesi
+    joystick.addEventListener('mouseleave', () => {
+        isMouseDown = false;
+        centerPoint.style.transform = 'translate(-50%, -50%)';
+        console.log('X: 0, Y: 0');
+    });
+
+    // Fare hareketini dinle
+    joystick.addEventListener('mousemove', handleMouseMove);
+</script>
+</body>
+</html>
