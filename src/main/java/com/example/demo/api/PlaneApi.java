@@ -29,9 +29,10 @@ public class PlaneApi {
         iPlaneControl.thrustCommand(thrustPercentage);
     }
 
-    @CrossOrigin(origins = {"http://localhost:63342" , "http://192.168.1.100"})
-    @PutMapping("/data")
+    @CrossOrigin(origins = { "http://192.168.1.100"})
+    @PostMapping("/data")
     void thrustControl(@RequestBody PlaneEntity planeEntity) {
+
         iPlaneControl.planeCommand(planeEntity);
     }
 }
