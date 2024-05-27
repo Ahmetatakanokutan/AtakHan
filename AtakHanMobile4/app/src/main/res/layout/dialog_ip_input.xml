@@ -9,12 +9,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bağlanmak istediğiniz IP'nizi yazın"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:padding="8dp" />
 
     <EditText
             android:id="@+id/editTextIpAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
-
+            android:inputType="text"
+            android:padding="8dp"
+            android:background="@drawable/edit_text_background"/>
 </LinearLayout>

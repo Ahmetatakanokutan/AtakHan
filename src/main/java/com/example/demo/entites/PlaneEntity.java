@@ -4,10 +4,10 @@ import com.example.demo.enums.PlaneEnum;
 
 public class PlaneEntity {
     private String throttle;
-    private float rudder;
-    private float elevator;
-    private float ailerionRight;
-    private float ailerionLeft;
+    private int rudder;
+    private int elevator;
+    private int ailerionRight;
+    private int ailerionLeft;
     public String getThrottle() {
         return throttle;
     }
@@ -23,7 +23,7 @@ public class PlaneEntity {
     public String getStringRudder() {
         return String.valueOf(rudder);
     }
-    public void setRudder(float rudder) {
+    public void setRudder(int rudder) {
         this.rudder = rudder;
     }
 
@@ -34,7 +34,7 @@ public class PlaneEntity {
     public String getStringElevator() {
         return String.valueOf(elevator);
     }
-    public void setElevator(float elevator) {
+    public void setElevator(int elevator) {
         this.elevator = elevator;
     }
 
@@ -45,7 +45,7 @@ public class PlaneEntity {
     public String getStringAilerionRight() {
         return String.valueOf(ailerionRight);
     }
-    public void setAilerionRight(float ailerionRight) {
+    public void setAilerionRight(int ailerionRight) {
         this.ailerionRight = ailerionRight;
     }
 
@@ -55,7 +55,7 @@ public class PlaneEntity {
     public String getStringAilerionLeft() {
         return String.valueOf(ailerionLeft);
     }
-    public void setAilerionLeft(float ailerionLeft) {
+    public void setAilerionLeft(int ailerionLeft) {
         this.ailerionLeft = ailerionLeft;
     }
 

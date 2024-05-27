@@ -68,7 +68,7 @@ public class planeControl implements PlaneService {
     @SneakyThrows
     public void planeCommand(PlaneEntity plane) {
         String destinationCopy = plane.getThrottle().toString() +"/" + plane.getStringRudder().toString() + "/" +
-        plane.getStringElevator().toString() + "/" + plane.getStringAilerionRight().toString() + "/" + plane.getStringAilerionLeft() + '\n';
+        plane.getStringElevator().toString() + "/" + plane.getStringAilerionRight().toString() + "/" + plane.getStringAilerionLeft().toString() + '\n';
         comnPort[port].writeBytes(destinationCopy.getBytes(), destinationCopy.length());
 
     }
