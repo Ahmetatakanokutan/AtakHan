@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>ATAKHAN-UAV</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: rgba(36, 37, 37, 1);
+      margin: 0;
+      padding: 0;
+
+    }
+    .navbar {
+      background-color: rgba(21, 20, 20, 1);
+      margin-bottom: 100px;
+    }
+    .navbar img {
+      height: 40px;
+
+    }
+    .navbar-text {
+      font-size: 20px;
+      color: white;
+    }
+    .container {
+       /* Butonları 32px daha aşağı almak için */
+    }
+    .btn-info, .btn-warning {
+
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      background-color: rgba(111, 152, 50, 1);
+      color: white;
+      font-weight: bold;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+    .btn-info:hover {
+      background-color: rgba(90, 125, 41, 1);
+    }
+    .btn-warning {
+      background-color: rgba(70, 100, 32, 1);
+    }
+    .btn-warning:hover {
+      background-color: rgba(50, 80, 20, 1);
+    }
+    .btn-info {
+      margin-bottom: 20px;
+    }
+    .slidecontainer {
+      width: 300px;
+      position: fixed;
+      top: 500px; /* Belirtilen y koordinatı */
+      left: 1360px; /* Belirtilen x koordinatı */
+      transform: rotate(-90deg);
+    }
+    .slidecontainer input[type=range] {
+      width: 300px;
+      height: 10px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #ddd;
+      outline: none;
+      opacity: 0.7;
+      transition: opacity .2s;
+    }
+    .slidecontainer input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 30px;
+      height: 30px;
+      background: rgba(111, 152, 50, 1);
+      cursor: pointer;
+      border-radius: 50%;
+      transition: background-color 0.3s ease;
+    }
+    .slidecontainer input[type=range]::-webkit-slider-thumb:hover {
+      background-color: rgba(90, 125, 41, 1);
+    }
+    .thrust-container {
+      position: fixed;
+      top: 670px; /* Slider'ın altına yerleştirmek için uygun bir pozisyon */
+      left: 1470px;
+      color: white;
+      text-align: center;
+      font-size: 16px;
+      transform: rotate(0deg);
+    }
+  </style>
+</head>
+<body>
+<div id="main">
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="./whiteGlider.png" alt="Atakhan Logo" style="margin-right: 10px;">
+        <span style="font-size: 20px;">AtakHan</span>
+      </a>
+    </div>
+  </nav>
+  <div class="container mt-3">
+    <div class="row">
+      <div class="col-sm-4 text-center">
+        <a href="#" id="yavasol" class="btn btn-warning" role="button">Yavaş Sol</a>
+        <br><br>
+        <a href="#" id="sol" class="btn btn-info" role="button">Sol</a>
+      </div>
+      <div class="col-sm-4 text-center">
+        <a href="#" id="yukari" class="btn btn-info" role="button">Yukarı</a>
+        <br><br><br><br><br><br>
+        <a href="#" id="asagi" class="btn btn-info" role="button">Aşağı</a>
+        <br><br><br><br><br><br>
+        <a href="#" id="motor" class="btn btn-info" role="button">Motor</a>
+      </div>
+      <div class="col-sm-4 text-center">
+        <a href="#" id="yavasag" class="btn btn-warning" role="button">Yavaş Sağ</a>
+        <br><br>
+        <a href="#" id="sag" class="btn btn-info" role="button">Sağ</a>
+      </div>
+    </div>
+  </div>
+  <div class="slidecontainer">
+    <input type="range" min="0" max="100" value="0" class="slider" id="Thrust">
+  </div>
+  <div class="thrust-container">
+    <p>Thrust: <span id="thrustValue">0%</span></p>
+  </div>
+</div>
+<script>
+  let isKeyPressed = false;
+  let intervalId = null;
+  function sendRequest(url) {
+    fetch(url, { method: 'GET' });
+  }
+  document.addEventListener("keydown", function(event) {
+    if (!isKeyPressed) {
+      isKeyPressed = true;
+      intervalId = setInterval(function() {
+        if (event.key === "w") {
+          sendRequest('http://localhost:8080/api/plane/yukari');
+        } else if (event.key === "s") {
+          sendRequest('http://localhost:8080/api/plane/asagi');
+        } else if (event.key === "a") {
+          sendRequest('http://localhost:8080/api/plane/sol');
+        } else if (event.key === "d") {
+          sendRequest('http://localhost:8080/api/plane/sag');
+        } else if (event.key === "e") {
+          sendRequest('http://localhost:8080/api/plane/yavasag');
+        } else if (event.key === "q") {
+          sendRequest('http://localhost:8080/api/plane/yavasol');
+        }
+      }, 50);
+    }
+  });
+  document.addEventListener("keyup", function(event) {
+    if (isKeyPressed) {
+      isKeyPressed = false;
+      clearInterval(intervalId);
+    }
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('asagi').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/asagi', { method: 'GET' });
+    });
+    document.getElementById('yukari').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/yukari', { method: 'GET' });
+    });
+    document.getElementById('sol').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/sol', { method: 'GET' });
+    });
+    document.getElementById('sag').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/sag', { method: 'GET' });
+    });
+    document.getElementById('yavasag').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/yavasag', { method: 'GET' });
+    });
+    document.getElementById('yavasol').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/yavasol', { method: 'GET' });
+    });
+    document.getElementById('motor').addEventListener('mousedown', function() {
+      fetch('http://localhost:8080/api/plane/thrust/0', { method: 'GET' });
+    });
+  });
+  var slider = document.getElementById('Thrust');
+  slider.addEventListener('input', function() {
+    var thrustvalue = slider.value;
+    document.getElementById('thrustValue').innerText = thrustvalue + '%';
+    const url = 'http://localhost:8080/api/plane/thrust/' + thrustvalue;
+    sendRequest(url);
+  });
+  document.addEventListener('keydown', function(event) {
+    if (event.keyCode === 38) {
+      slider.value = parseInt(slider.value) + 2;
+      var thrustvalue = slider.value;
+      document.getElementById('thrustValue').innerText = thrustvalue + '%';
+      console.log('Thrust increased to:', thrustvalue);
+      const url = 'http://localhost:8080/api/plane/thrust/' + thrustvalue;
+      sendRequest(url);
+    } else if (event.keyCode === 40) {
+      slider.value -= 2;
+      var thrustvalue = slider.value;
+      document.getElementById('thrustValue').innerText = thrustvalue + '%';
+      console.log('Thrust decreased to:', thrustvalue);
+      const url = 'http://localhost:8080/api/plane/thrust/' + thrustvalue;
+      sendRequest(url);
+    }
+  });
+  document.getElementById('Thrust').addEventListener('change', function() {
+    var thrustvalue = slider.value;
+    console.log(thrustvalue);
+    const url = 'http://localhost:8080/api/plane/thrust/' + thrustvalue;
+    sendRequest(url);
+  });
+</script>
+</body>
+</html>
